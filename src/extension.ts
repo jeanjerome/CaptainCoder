@@ -1,70 +1,47 @@
 import * as vscode from 'vscode';
-import { OllamaService } from './api/ollamaService';
-import { CacheManager } from './utils/cacheManager';
-import { autocompleteCommand } from './commands/autocomplete';
-import { provideCompletionItems } from './completionProvider';
+import { handleGenerateCompletion } from './commands/generateCompletion';
+import { checkAndInstallModel } from './commands/checkAndInstallModel';
+import { configureParameters } from './commands/configureParameters';
+import { modelTreeDataProvider } from './views/ModelTreeDataProvider';
+import { pullModel, deleteModel } from './api/ollamaApi';
 
-let VSConfig: vscode.WorkspaceConfiguration;
-let apiEndpoint: string;
-let apiModel: string;
-let apiMessageHeader: string;
-let apiTemperature: number;
-let numPredict: number;
-let promptWindowSize: number;
-let completionKeys: string;
-let responsePreview: boolean | undefined;
-let responsePreviewMaxTokens: number;
-let responsePreviewDelay: number;
-let continueInline: boolean | undefined;
+export function activate(context: vscode.ExtensionContext) {
+    console.log('CaptainCoder is now active!');
 
-function updateVSConfig() {
-  VSConfig = vscode.workspace.getConfiguration("captaincoder");
-  apiEndpoint = VSConfig.get("endpoint") || "http://localhost:11434/api/generate";
-  apiModel = VSConfig.get("model") || "codestral:22b-v0.1-q4_K_M";
-  apiMessageHeader = VSConfig.get("message header") || "";
-  numPredict = VSConfig.get("max tokens predicted") || 1000;
-  promptWindowSize = VSConfig.get("prompt window size") || 2000;
-  completionKeys = VSConfig.get("completion keys") || " ";
-  responsePreview = VSConfig.get("response preview");
-  responsePreviewMaxTokens = VSConfig.get("preview max tokens") || 50;
-  responsePreviewDelay = VSConfig.get("preview delay") || 0;
-  continueInline = VSConfig.get("continue inline");
-  apiTemperature = VSConfig.get("temperature") || 0.5;
+    vscode.window.registerTreeDataProvider('modelTreeView', modelTreeDataProvider);
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('captaincoder.generateCompletion', handleGenerateCompletion),
+        vscode.commands.registerCommand('captaincoder.checkAndInstallModel', checkAndInstallModel),
+        vscode.commands.registerCommand('captaincoder.configureParameters', configureParameters),
+        vscode.commands.registerCommand('captaincoder.refreshModelList', () => modelTreeDataProvider.refresh()),
+        vscode.commands.registerCommand('captaincoder.downloadModel', async (modelName: string) => {
+            try {
+                await pullModel(modelName);
+                vscode.window.showInformationMessage(`Model ${modelName} successfully downloaded.`);
+                modelTreeDataProvider.refresh(); // Refresh the tree view
+            } catch (error) {
+                if (error instanceof Error) {
+                    vscode.window.showErrorMessage(`Error downloading model: ${error.message}`);
+                } else {
+                    vscode.window.showErrorMessage('An unknown error occurred while downloading the model.');
+                }
+            }
+        }),
+        vscode.commands.registerCommand('captaincoder.deleteModel', async (modelName: string) => {
+            try {
+                await deleteModel(modelName);
+                vscode.window.showInformationMessage(`Model ${modelName} successfully deleted.`);
+                modelTreeDataProvider.refresh(); // Refresh the tree view
+            } catch (error) {
+                if (error instanceof Error) {
+                    vscode.window.showErrorMessage(`Error deleting model: ${error.message}`);
+                } else {
+                    vscode.window.showErrorMessage('An unknown error occurred while deleting the model.');
+                }
+            }
+        })
+    );
 }
 
-updateVSConfig();
-
-vscode.workspace.onDidChangeConfiguration(updateVSConfig);
-
-function messageHeaderSub(document: vscode.TextDocument) {
-  const sub = apiMessageHeader
-    .replace("{LANG}", document.languageId)
-    .replace("{FILE_NAME}", document.fileName)
-    .replace("{PROJECT_NAME}", vscode.workspace.name || "Untitled");
-  return sub;
-}
-
-function activate(context: vscode.ExtensionContext) {
-  const ollamaService = new OllamaService(apiEndpoint, apiModel, apiTemperature, numPredict);
-  const cacheManager = new CacheManager();
-
-  const completionProvider = vscode.languages.registerCompletionItemProvider("*", {
-    provideCompletionItems: (document, position, cancellationToken) =>
-      provideCompletionItems(document, position, cancellationToken, ollamaService, messageHeaderSub(document), promptWindowSize, responsePreview!, responsePreviewMaxTokens, responsePreviewDelay, continueInline!)
-  }, ...completionKeys.split(""));
-
-  const externalAutocompleteCommand = vscode.commands.registerTextEditorCommand(
-    "captaincoder.autocomplete",
-    (textEditor, _, cancellationToken) =>
-      autocompleteCommand(textEditor, cancellationToken, ollamaService, messageHeaderSub(textEditor.document), promptWindowSize)
-  );
-
-  context.subscriptions.push(completionProvider, externalAutocompleteCommand);
-}
-
-function deactivate() { }
-
-module.exports = {
-  activate,
-  deactivate,
-};
+export function deactivate() {}
