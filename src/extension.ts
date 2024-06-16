@@ -2,13 +2,15 @@ import * as vscode from 'vscode';
 import { handleGenerateCompletion } from './commands/generateCompletion';
 import { checkAndInstallModel } from './commands/checkAndInstallModel';
 import { configureParameters } from './commands/configureParameters';
-import { modelTreeDataProvider } from './views/ModelTreeDataProvider';
+import { modelTreeDataProvider } from './views/OllamaModelTreeview';
+import { ModelWebview } from './views/OllamaModelWebview';
 import { pullModel, deleteModel } from './api/ollamaApi';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('CaptainCoder is now active!');
 
     vscode.window.registerTreeDataProvider('modelTreeView', modelTreeDataProvider);
+    const modelWebview = new ModelWebview();
 
     context.subscriptions.push(
         vscode.commands.registerCommand('captaincoder.generateCompletion', handleGenerateCompletion),
@@ -40,6 +42,9 @@ export function activate(context: vscode.ExtensionContext) {
                     vscode.window.showErrorMessage('An unknown error occurred while deleting the model.');
                 }
             }
+        }),
+        vscode.commands.registerCommand('captaincoder.showModelManager', () => {
+            modelWebview.show();
         })
     );
 }

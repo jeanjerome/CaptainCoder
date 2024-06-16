@@ -39,69 +39,74 @@
 		"onCommand:captaincoder.configureParameters",
 		"onCommand:captaincoder.refreshModelList",
 		"onCommand:captaincoder.downloadModel",
-		"onCommand:captaincoder.deleteModel"
+		"onCommand:captaincoder.deleteModel",
+		"onCommand:captaincoder.showModelManager"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
-		  {
-			"command": "captaincoder.generateCompletion",
-			"title": "CaptainCoder: Generate Completion"
-		  },
-		  {
-			"command": "captaincoder.checkAndInstallModel",
-			"title": "CaptainCoder: Check and Install Model"
-		  },
-		  {
-			"command": "captaincoder.configureParameters",
-			"title": "CaptainCoder: Configure Parameters"
-		  },
-		  {
-			"command": "captaincoder.refreshModelList",
-			"title": "CaptainCoder: Refresh Model List"
-		  },
-		  {
-			"command": "captaincoder.downloadModel",
-			"title": "CaptainCoder: Download Model"
-		  },
-		  {
-			"command": "captaincoder.deleteModel",
-			"title": "CaptainCoder: Delete Model"
-		  }
+			{
+				"command": "captaincoder.generateCompletion",
+				"title": "CaptainCoder: Generate Completion"
+			},
+			{
+				"command": "captaincoder.checkAndInstallModel",
+				"title": "CaptainCoder: Check and Install Model"
+			},
+			{
+				"command": "captaincoder.configureParameters",
+				"title": "CaptainCoder: Configure Parameters"
+			},
+			{
+				"command": "captaincoder.refreshModelList",
+				"title": "CaptainCoder: Refresh Model List"
+			},
+			{
+				"command": "captaincoder.downloadModel",
+				"title": "CaptainCoder: Download Model"
+			},
+			{
+				"command": "captaincoder.deleteModel",
+				"title": "CaptainCoder: Delete Model"
+			},
+			{
+				"command": "captaincoder.showModelManager",
+				"title": "CaptainCoder: Show Model Manager"
+			}
 		],
 		"views": {
-		  "explorer": [
-			{
-			  "id": "modelTreeView",
-			  "name": "Ollama Models"
-			}
-		  ]
+			"explorer": [
+				{
+					"id": "modelTreeView",
+					"name": "Ollama Models"
+				}
+			]
 		},
 		"configuration": {
-		  "type": "object",
-		  "title": "CaptainCoder Configuration",
-		  "properties": {
-			"captaincoder.model": {
-			  "type": "string",
-			  "default": "qwen2:0.5b",
-			  "description": "The model to use for generating completions."
+			"type": "object",
+			"title": "CaptainCoder Configuration",
+			"properties": {
+				"captaincoder.model": {
+					"type": "string",
+					"default": "qwen2:0.5b",
+					"description": "The model to use for generating completions."
+				}
 			}
-		  }
 		}
-	  },
-	  "scripts": {
+	},
+	"scripts": {
 		"vscode:prepublish": "tsc -p ./",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"postinstall": "node ./node_modules/vscode/bin/install"
-	  },
+	},
 	"devDependencies": {
-		"@types/node": "^14.14.37",
-		"@types/vscode": "^1.58.0",
+		"@types/node": "^14.18.63",
+		"@types/node-fetch": "^2.6.11",
 		"typescript": "^4.3.5",
 		"vscode": "^1.1.37"
 	},
 	"dependencies": {
-		"node-fetch": "^2.6.1"
+		"node-fetch": "^2.7.0"
 	}
 }

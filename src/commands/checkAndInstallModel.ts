@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { listLocalModels, pullModel } from '../api/ollamaApi';
-import { modelTreeDataProvider } from '../views/ModelTreeDataProvider';
+import { modelTreeDataProvider } from '../views/OllamaModelTreeview';
 
 export async function checkAndInstallModel() {
     const modelName = vscode.workspace.getConfiguration('captaincoder').get('model', 'qwen2:0.5b');

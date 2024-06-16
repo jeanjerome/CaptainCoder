@@ -1,25 +1,20 @@
+import fetch from 'node-fetch';
+import { Response } from 'node-fetch';
+
 export async function fetchHelper<T>(url: string, method: string, body?: any): Promise<T> {
-    const response = await fetch(url, {
+    const response: Response = await fetch(url, {
         method,
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(body)
+        body: body ? JSON.stringify(body) : undefined
     });
 
-    const reader = response.body?.getReader();
-    const decoder = new TextDecoder();
-    let result = '';
-
-    if (!reader) {
-        throw new Error('Failed to get reader from response body.');
+    if (!response.body) {
+        throw new Error('Failed to get body from response.');
     }
 
-    while (true) {
-        const { done, value } = await reader.read();
-        if (done) {break;}
-        result += decoder.decode(value, { stream: true });
-    }
+    const result = await response.text();
 
     if (!response.ok) {
         console.error(`HTTP error! Status: ${response.status}. Response: ${result}`);
@@ -28,7 +23,6 @@ export async function fetchHelper<T>(url: string, method: string, body?: any): P
 
     // Handle the case where the response is empty
     if (!result.trim()) {
-        // Return an empty object for void responses
         return {} as T;
     }
 
