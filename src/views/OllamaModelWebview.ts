@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { listLocalModels, pullModel, deleteModel } from '../api/ollamaApi';
+import { ModelDetails } from '../types/ollamaTypes';
 
 export class ModelWebview {
     private panel: vscode.WebviewPanel | undefined;
@@ -38,6 +39,7 @@ export class ModelWebview {
                         break;
                     case 'download':
                         this.panel!.webview.postMessage({ command: 'downloading', state: true });
+                        vscode.window.showInformationMessage(`Starting downloading model ${message.model}...`);
                         await pullModel(message.model);
                         vscode.window.showInformationMessage(`Model ${message.model} successfully downloaded.`);
                         this.panel!.webview.postMessage({ command: 'downloading', state: false });
@@ -49,7 +51,7 @@ export class ModelWebview {
         }
     }
 
-    private getWebviewContent(models: string[]): string {
+    private getWebviewContent(models: ModelDetails[]): string {
         return `
             <!DOCTYPE html>
             <html lang="en">
@@ -99,8 +101,7 @@ export class ModelWebview {
                     }
                     .model-list li {
                         display: flex;
-                        align-items: center;
-                        justify-content: space-between;
+                        flex-direction: column;
                         padding: 10px;
                         background-color: #2d2d2d;
                         margin-bottom: 5px;
@@ -108,6 +109,11 @@ export class ModelWebview {
                     }
                     .model-list li:hover {
                         background-color: #383838;
+                    }
+                    .model-list li .model-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
                     }
                     .model-list li .model-name {
                         font-size: 1.2em;
@@ -117,9 +123,26 @@ export class ModelWebview {
                         font-size: 1.2em;
                         color: #aaaaaa;
                     }
+                    .model-list li table {
+                        width: 100%;
+                        margin-top: 10px;
+                        border-collapse: collapse;
+                    }
+                    .model-list li table, th, td {
+                        border: 1px solid #444;
+                    }
+                    .model-list li table th, .model-list li table td {
+                        padding: 8px;
+                        text-align: left;
+                    }
+                    .model-list li table th {
+                        background-color: #333;
+                        color: #ffffff;
+                    }
                     .actions {
                         display: flex;
                         gap: 10px;
+                        margin-top: 10px;
                     }
                     .install-section {
                         margin-left: 20px; /* Decalage vers la droite */
@@ -152,16 +175,34 @@ export class ModelWebview {
                 <h2>Installed Models</h2>
                 <ul class="model-list">
                     ${models.map(model => {
-                        const [name, tag] = model.split(':');
+                        const [name, tag] = model.name.split(':');
                         return `
                             <li>
-                                <div>
-                                    <span class="model-name">${name}</span>
-                                    <span class="model-tag">:${tag}</span>
+                                <div class="model-header">
+                                    <div>
+                                        <span class="model-name">${name}</span>
+                                        <span class="model-tag">:${tag}</span>
+                                    </div>
+                                    <div class="actions">
+                                        <button onclick="deleteModel('${model.name}')">Delete</button>
+                                    </div>
                                 </div>
-                                <div class="actions">
-                                    <button onclick="deleteModel('${model}')">Delete</button>
-                                </div>
+                                <table>
+                                    <tr>
+                                        <th>Modified At</th>
+                                        <th>Size</th>
+                                        <th>Family</th>
+                                        <th>Parameter Size</th>
+                                        <th>Quantization Level</th>
+                                    </tr>
+                                    <tr>
+                                        <td>${new Date(model.modified_at).toLocaleString()}</td>
+                                        <td>${(model.size / (1024 * 1024)).toFixed(2)} MB</td>
+                                        <td>${model.details.family}</td>
+                                        <td>${model.details.parameter_size}</td>
+                                        <td>${model.details.quantization_level}</td>
+                                    </tr>
+                                </table>
                             </li>
                         `;
                     }).join('')}

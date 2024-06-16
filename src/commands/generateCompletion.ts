@@ -12,8 +12,9 @@ export async function handleGenerateCompletion() {
 
     try {
         const response = await generateCompletionFromApi({ model, prompt });
+        const completion = response.choices[0]?.text || '';
         editor.edit(editBuilder => {
-            editBuilder.replace(editor.selection, response.response);
+            editBuilder.replace(editor.selection, completion);
         });
     } catch (error) {
         if (error instanceof Error) {

@@ -35,7 +35,6 @@
 	],
 	"activationEvents": [
 		"onCommand:captaincoder.generateCompletion",
-		"onCommand:captaincoder.checkAndInstallModel",
 		"onCommand:captaincoder.configureParameters",
 		"onCommand:captaincoder.refreshModelList",
 		"onCommand:captaincoder.downloadModel",
@@ -48,10 +47,6 @@
 			{
 				"command": "captaincoder.generateCompletion",
 				"title": "CaptainCoder: Generate Completion"
-			},
-			{
-				"command": "captaincoder.checkAndInstallModel",
-				"title": "CaptainCoder: Check and Install Model"
 			},
 			{
 				"command": "captaincoder.configureParameters",
@@ -84,7 +79,7 @@
 		},
 		"configuration": {
 			"type": "object",
-			"title": "CaptainCoder Configuration",
+			"title": "CaptainCoder",
 			"properties": {
 				"captaincoder.model": {
 					"type": "string",

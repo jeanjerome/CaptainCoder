@@ -1,5 +1,5 @@
 import { fetchHelper } from '../utils/fetchHelper';
-import { OllamaCompletionRequest, OllamaCompletionResponse } from '../types/ollamaTypes';
+import { OllamaCompletionRequest, OllamaCompletionResponse, ModelDetails } from '../types/ollamaTypes';
 
 const OLLAMA_API_URL = 'http://localhost:11434/api';
 
@@ -7,9 +7,9 @@ export async function generateCompletion(request: OllamaCompletionRequest): Prom
     return await fetchHelper<OllamaCompletionResponse>(`${OLLAMA_API_URL}/generate`, 'POST', request);
 }
 
-export async function listLocalModels(): Promise<string[]> {
-    const response = await fetchHelper<{ models: { name: string }[] }>(`${OLLAMA_API_URL}/tags`, 'GET');
-    return response.models.map(model => model.name);
+export async function listLocalModels(): Promise<ModelDetails[]> {
+    const response = await fetchHelper<{ models: ModelDetails[] }>(`${OLLAMA_API_URL}/tags`, 'GET');
+    return response.models;
 }
 
 export async function pullModel(modelName: string): Promise<void> {
