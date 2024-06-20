@@ -4,6 +4,10 @@ import { configureParameters } from './commands/configureParameters';
 import { ModelWebview } from './views/OllamaModelWebview';
 import { pullModel, deleteModel } from './api/ollamaApi';
 
+/**
+* Activates the CaptainCoder extension and registers commands with VS Code.
+* @param {vscode.ExtensionContext} context - The extension context.
+*/
 export function activate(context: vscode.ExtensionContext) {
     console.log('CaptainCoder is now active!');
 
@@ -14,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('captaincoder.configureParameters', configureParameters),
         vscode.commands.registerCommand('captaincoder.downloadModel', async (modelName: string) => {
             try {
-                await pullModel(modelName);
+                await pullModel(modelName)
                 vscode.window.showInformationMessage(`Model ${modelName} successfully downloaded.`);
             } catch (error) {
                 if (error instanceof Error) {

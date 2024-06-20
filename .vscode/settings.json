@@ -7,5 +7,20 @@
 		"out": true // set this to false to include "out" folder in search results
 	},
 	// Turn off tsc task auto detection since we have the necessary tasks as npm scripts
-	"typescript.tsc.autoDetect": "off"
+	"typescript.tsc.autoDetect": "off",
+	"Wingman.Ollama": {
+		"chatModel": "codellama:34b",
+		"codeModel": "codellama:34b",
+		"baseUrl": "http://localhost:11434",
+		"apiPath": "/api/generate",
+		"modelInfoPath": "/api/show"
+	},
+	"Wingman.InteractionSettings": {
+		"codeCompletionEnabled": true,
+		"codeStreaming": false,
+		"codeContextWindow": 256,
+		"codeMaxTokens": -1,
+		"chatContextWindow": 4096,
+		"chatMaxTokens": 4096
+	},
 }

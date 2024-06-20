@@ -23,19 +23,20 @@ export class ModelWebview {
             });
 
             const models = await listLocalModels();
-            this.panel.webview.html = this.getWebviewContent(models);
+            const defaultModel = vscode.workspace.getConfiguration('captaincoder').get('model', 'qwen2:7b');
+            this.panel.webview.html = this.getWebviewContent(models, defaultModel);
 
             this.panel.webview.onDidReceiveMessage(async message => {
                 switch (message.command) {
                     case 'refresh':
                         const models = await listLocalModels();
-                        this.panel!.webview.html = this.getWebviewContent(models);
+                        this.panel!.webview.html = this.getWebviewContent(models, defaultModel);
                         break;
                     case 'delete':
                         await deleteModel(message.model);
                         vscode.window.showInformationMessage(`Model ${message.model} successfully deleted.`);
                         const updatedModels = await listLocalModels();
-                        this.panel!.webview.html = this.getWebviewContent(updatedModels);
+                        this.panel!.webview.html = this.getWebviewContent(updatedModels, defaultModel);
                         break;
                     case 'download':
                         this.panel!.webview.postMessage({ command: 'downloading', state: true });
@@ -44,14 +45,20 @@ export class ModelWebview {
                         vscode.window.showInformationMessage(`Model ${message.model} successfully downloaded.`);
                         this.panel!.webview.postMessage({ command: 'downloading', state: false });
                         const refreshedModels = await listLocalModels();
-                        this.panel!.webview.html = this.getWebviewContent(refreshedModels);
+                        this.panel!.webview.html = this.getWebviewContent(refreshedModels, defaultModel);
+                        break;
+                    case 'setDefault':
+                        vscode.workspace.getConfiguration('captaincoder').update('model', message.model, vscode.ConfigurationTarget.Global);
+                        vscode.window.showInformationMessage(`Model ${message.model} set as default.`);
+                        const newDefaultModels = await listLocalModels();
+                        this.panel!.webview.html = this.getWebviewContent(newDefaultModels, message.model);
                         break;
                 }
             });
         }
     }
 
-    private getWebviewContent(models: ModelDetails[]): string {
+    private getWebviewContent(models: ModelDetails[], defaultModel: string): string {
         return `
             <!DOCTYPE html>
             <html lang="en">
@@ -67,11 +74,10 @@ export class ModelWebview {
                         margin: 0;
                         padding: 20px;
                     }
-                    h1 {
+                    h1, h2 {
                         color: #ffffff;
                     }
                     h2 {
-                        color: #ffffff;
                         margin-top: 20px;
                     }
                     button, input {
@@ -82,12 +88,15 @@ export class ModelWebview {
                         border: none;
                     }
                     button {
-                        background-color: #007acc;
+                        background-color: #333333;
                         color: white;
                         cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
                     }
                     button:hover {
-                        background-color: #005f99;
+                        background-color: #444444;
                     }
                     input {
                         background-color: #333333;
@@ -101,7 +110,7 @@ export class ModelWebview {
                     }
                     .model-list li {
                         display: flex;
-                        flex-direction: column;
+                        justify-content: space-between;
                         padding: 10px;
                         background-color: #2d2d2d;
                         margin-bottom: 5px;
@@ -110,9 +119,12 @@ export class ModelWebview {
                     .model-list li:hover {
                         background-color: #383838;
                     }
+                    .model-details {
+                        display: flex;
+                        flex-direction: column;
+                    }
                     .model-list li .model-header {
                         display: flex;
-                        justify-content: space-between;
                         align-items: center;
                     }
                     .model-list li .model-name {
@@ -141,11 +153,15 @@ export class ModelWebview {
                     }
                     .actions {
                         display: flex;
+                        flex-direction: column;
                         gap: 10px;
-                        margin-top: 10px;
+                        margin-left: 20px;
                     }
                     .install-section {
                         margin-left: 20px; /* Decalage vers la droite */
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
                     }
                     .spinner {
                         border: 4px solid rgba(0, 0, 0, 0.1);
@@ -159,6 +175,13 @@ export class ModelWebview {
                     .spinner.show {
                         display: inline-block;
                     }
+                    .default-label {
+                        background-color: #007acc;
+                        color: #ffffff;
+                        padding: 2px 5px;
+                        border-radius: 3px;
+                        font-size: 0.9em;
+                    }
                     @keyframes spin {
                         0% {
                             transform: rotate(0deg);
@@ -171,46 +194,10 @@ export class ModelWebview {
             </head>
             <body>
                 <h1>Ollama Models Manager</h1>
-                <button onclick="refresh()">Refresh</button>
-                <h2>Installed Models</h2>
-                <ul class="model-list">
-                    ${models.map(model => {
-                        const [name, tag] = model.name.split(':');
-                        return `
-                            <li>
-                                <div class="model-header">
-                                    <div>
-                                        <span class="model-name">${name}</span>
-                                        <span class="model-tag">:${tag}</span>
-                                    </div>
-                                    <div class="actions">
-                                        <button onclick="deleteModel('${model.name}')">Delete</button>
-                                    </div>
-                                </div>
-                                <table>
-                                    <tr>
-                                        <th>Modified At</th>
-                                        <th>Size</th>
-                                        <th>Family</th>
-                                        <th>Parameter Size</th>
-                                        <th>Quantization Level</th>
-                                    </tr>
-                                    <tr>
-                                        <td>${new Date(model.modified_at).toLocaleString()}</td>
-                                        <td>${(model.size / (1024 * 1024)).toFixed(2)} MB</td>
-                                        <td>${model.details.family}</td>
-                                        <td>${model.details.parameter_size}</td>
-                                        <td>${model.details.quantization_level}</td>
-                                    </tr>
-                                </table>
-                            </li>
-                        `;
-                    }).join('')}
-                </ul>
                 <h2>Install New Model</h2>
                 <div class="install-section">
                     <input type="text" id="newModel" placeholder="Model name">
-                    <button onclick="downloadModel()">Install</button>
+                    <button onclick="downloadModel()">&#128229; Install</button>
                     <div class="spinner" id="spinner"></div>
                 </div>
                 <script>
@@ -225,6 +212,9 @@ export class ModelWebview {
                         const model = document.getElementById('newModel').value;
                         vscode.postMessage({ command: 'download', model: model });
                     }
+                    function setDefaultModel(model) {
+                        vscode.postMessage({ command: 'setDefault', model: model });
+                    }
                     window.addEventListener('message', event => {
                         const message = event.data;
                         if (message.command === 'downloading') {
@@ -237,6 +227,44 @@ export class ModelWebview {
                         }
                     });
                 </script>
+                <h2>Installed Models</h2>
+                <button onclick="refresh()">&#128260; Refresh</button>
+                <ul class="model-list">
+                    ${models.map(model => {
+                        const [name, tag] = model.name.split(':');
+                        const isDefault = model.name === defaultModel ? '<span class="default-label">default</span>' : '';
+                        return `
+                            <li>
+                                <div class="model-details">
+                                    <div class="model-header">
+                                        <span class="model-name">${name}</span>
+                                        <span class="model-tag">:${tag} ${isDefault}</span>
+                                    </div>
+                                    <table>
+                                        <tr>
+                                            <th>Modified At</th>
+                                            <th>Size</th>
+                                            <th>Family</th>
+                                            <th>Parameter Size</th>
+                                            <th>Quantization Level</th>
+                                        </tr>
+                                        <tr>
+                                            <td>${new Date(model.modified_at).toLocaleString()}</td>
+                                            <td>${(model.size / (1024 * 1024)).toFixed(2)} MB</td>
+                                            <td>${model.details.family}</td>
+                                            <td>${model.details.parameter_size}</td>
+                                            <td>${model.details.quantization_level}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="actions">
+                                    <button onclick="deleteModel('${model.name}')">&#128465; Delete</button>
+                                    <button onclick="setDefaultModel('${model.name}')">&#9733; Set as Default</button>
+                                </div>
+                            </li>
+                        `;
+                    }).join('')}
+                </ul>
             </body>
             </html>
         `;

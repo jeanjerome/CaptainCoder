@@ -5,7 +5,7 @@ export async function configureParameters() {
 
     const model = await vscode.window.showInputBox({
         prompt: 'Enter the model name',
-        value: config.get('model', 'qwen2:0.5b')
+        value: config.get('model', 'qwen2:7b')
     });
 
     if (model) {

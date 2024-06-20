@@ -21,12 +21,10 @@ export async function fetchHelper<T>(url: string, method: string, body?: any): P
         throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    // Handle the case where the response is empty
     if (!result.trim()) {
         return {} as T;
     }
 
-    // Handle the case where the response is streaming multiple JSON lines
     const lines = result.trim().split('\n');
     const finalLine = lines[lines.length - 1];
 
