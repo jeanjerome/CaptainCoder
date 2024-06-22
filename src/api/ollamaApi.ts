@@ -1,5 +1,6 @@
-import { fetchHelper } from '../utils/fetchHelper';
-import { ModelDetails, OllamaRequest, OllamaResponse } from '../types/ollamaTypes';
+import { fetchHelper } from '../utils/fetchHelper.js';
+import { ModelDetails, OllamaRequest, OllamaResponse } from '../types/ollamaTypes.js';
+import { TextDecoder } from 'util';
 
 const OLLAMA_API_URL = 'http://localhost:11434/api';
 const decoder = new TextDecoder();

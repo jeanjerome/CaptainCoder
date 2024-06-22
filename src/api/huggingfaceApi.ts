@@ -1,2 +1,2 @@
-import { fetchHelper } from '../utils/fetchHelper';
+import { fetchHelper } from '../utils/fetchHelper.js';
 

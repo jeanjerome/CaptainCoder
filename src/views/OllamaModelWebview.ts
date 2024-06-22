@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { listLocalModels, pullModel, deleteModel } from '../api/ollamaApi';
-import { ModelDetails } from '../types/ollamaTypes';
+import { listLocalModels, pullModel, deleteModel } from '../api/ollamaApi.js';
+import { ModelDetails } from '../types/ollamaTypes.js';
 
 export class ModelWebview {
     private panel: vscode.WebviewPanel | undefined;

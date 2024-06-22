@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { generateCompletion } from '../api/ollamaApi';
-import { getContentWindow } from '../utils/contentWindow';
-import { OllamaRequest, ModelDetails } from '../types/ollamaTypes';
-import { getAdditionalContext } from '../utils/contextHelper';
+import { generateCompletion } from '../api/ollamaApi.js';
+import { getContentWindow } from '../utils/contentWindow.js';
+import { OllamaRequest, ModelDetails } from '../types/ollamaTypes.js';
+import { getAdditionalContext } from '../utils/contextHelper.js';
 
 
 export async function handleGenerateCompletion() {

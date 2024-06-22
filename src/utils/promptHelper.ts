@@ -1,4 +1,4 @@
-import { PromptOptions } from '../types/ollamaTypes';
+import { PromptOptions } from '../types/ollamaTypes.js';
 
 export function getPromptOptions(family: string): PromptOptions {
     switch (family.toLowerCase()) {

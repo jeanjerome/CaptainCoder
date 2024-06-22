@@ -1,107 +1,120 @@
 {
-	"name": "captaincoder",
-	"displayName": "CaptainCoder",
-	"description": "CaptainCoder is a privacy-focused, locally-run code completion extension for VSCode that supports any Ollama model and is open-source.",
-	"version": "1.1.0",
-	"icon": "icon.png",
-	"publisher": "jeanjerome",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/jeanjerome/captaincoder/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/jeanjerome/captaincoder"
-	},
-	"engines": {
-		"vscode": "^1.89.0"
-	},
-	"categories": [
-		"AI",
-		"Machine Learning",
-		"Extension Packs",
-		"Programming Languages"
-	],
-	"keywords": [
-		"llama",
-		"ollama",
-		"gpt",
-		"coding",
-		"autocomplete",
-		"open source",
-		"assistant",
-		"ai",
-		"llm"
-	],
-	"activationEvents": [
-		"onCommand:captaincoder.generateCompletion",
-		"onCommand:captaincoder.configureParameters",
-		"onCommand:captaincoder.refreshModelList",
-		"onCommand:captaincoder.downloadModel",
-		"onCommand:captaincoder.deleteModel",
-		"onCommand:captaincoder.showModelManager"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "captaincoder.generateCompletion",
-				"title": "CaptainCoder: Generate Completion"
-			},
-			{
-				"command": "captaincoder.configureParameters",
-				"title": "CaptainCoder: Configure Parameters"
-			},
-			{
-				"command": "captaincoder.refreshModelList",
-				"title": "CaptainCoder: Refresh Model List"
-			},
-			{
-				"command": "captaincoder.downloadModel",
-				"title": "CaptainCoder: Download Model"
-			},
-			{
-				"command": "captaincoder.deleteModel",
-				"title": "CaptainCoder: Delete Model"
-			},
-			{
-				"command": "captaincoder.showModelManager",
-				"title": "CaptainCoder: Show Model Manager"
-			}
-		],
-		"views": {
-			"explorer": [
-				{
-					"id": "modelTreeView",
-					"name": "Ollama Models"
-				}
-			]
-		},
-		"configuration": {
-			"type": "object",
-			"title": "CaptainCoder",
-			"properties": {
-				"captaincoder.model": {
-					"type": "string",
-					"default": "qwen2:7b",
-					"description": "The model to use for generating completions."
-				}
-			}
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "tsc -p ./",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install"
-	},
-	"devDependencies": {
-		"@types/node": "^14.18.63",
-		"@types/node-fetch": "^2.6.11",
-		"typescript": "^4.3.5",
-		"vscode": "^1.1.37"
-	},
-	"dependencies": {
-		"node-fetch": "^2.7.0"
-	}
+    "name": "captaincoder",
+    "displayName": "CaptainCoder",
+    "description": "Your awesome VS Code extension.",
+    "version": "1.1.0",
+    "icon": "icon.png",
+    "publisher": "jeanjerome",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/jeanjerome/captaincoder/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jeanjerome/captaincoder"
+    },
+    "engines": {
+        "vscode": "^1.73.0",
+        "node": "^12.20.0 || >=14.13.1"
+    },
+    "categories": [
+        "AI",
+        "Machine Learning",
+        "Extension Packs",
+        "Programming Languages"
+    ],
+    "keywords": [
+        "llama",
+        "ollama",
+        "gpt",
+        "coding",
+        "autocomplete",
+        "open source",
+        "assistant",
+        "ai",
+        "llm"
+    ],
+    "activationEvents": [
+        "onCommand:captaincoder.generateCompletion",
+        "onCommand:captaincoder.configureParameters",
+        "onCommand:captaincoder.downloadModel",
+        "onCommand:captaincoder.deleteModel",
+        "onCommand:captaincoder.showModelManager",
+        "onCommand:captaincoder.generateTextFromCodebase",
+        "onDebug",
+        "onStartupFinished"
+    ],
+    "exports": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "captaincoder.helloWorld",
+                "title": "CaptainCoder: Hello World"
+            },
+            {
+                "command": "captaincoder.generateCompletion",
+                "title": "CaptainCoder: Generate Completion"
+            },
+            {
+                "command": "captaincoder.configureParameters",
+                "title": "CaptainCoder: Configure Parameters"
+            },
+            {
+                "command": "captaincoder.downloadModel",
+                "title": "CaptainCoder: Download Model"
+            },
+            {
+                "command": "captaincoder.deleteModel",
+                "title": "CaptainCoder: Delete Model"
+            },
+            {
+                "command": "captaincoder.showModelManager",
+                "title": "CaptainCoder: Show Model Manager"
+            },
+            {
+                "command": "captaincoder.generateTextFromCodebase",
+                "title": "CaptainCoder: Generate Text from Codebase"
+            }
+        ],
+        "views": {
+            "explorer": [
+                {
+                    "id": "modelTreeView",
+                    "name": "Ollama Models"
+                }
+            ]
+        },
+        "configuration": {
+            "type": "object",
+            "title": "CaptainCoder",
+            "properties": {
+                "captaincoder.model": {
+                    "type": "string",
+                    "default": "qwen2:7b",
+                    "description": "The model to use for generating completions."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "lint": "eslint \"src/**/*.ts\"",
+        "watch": "tsc -watch -p ./"
+    },
+    "devDependencies": {
+        "@types/node": "^18.19.39",
+        "@types/tmp": "^0.2.6",
+        "@types/vscode": "^1.73.0",
+        "@typescript-eslint/eslint-plugin": "^6.7.0",
+        "@typescript-eslint/parser": "^6.7.0",
+        "eslint": "^8.26.0",
+        "typescript": "^5.4.2"
+    },
+    "dependencies": {
+        "node-fetch": "^3.3.2",
+        "simple-git": "^3.25.0",
+        "tmp": "^0.2.3"
+    },
+    "type": "module"
 }
