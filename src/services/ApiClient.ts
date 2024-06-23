@@ -1,4 +1,4 @@
-import { sendHttpRequest } from '../utils/HttpUtils';
+import { sendHttpRequest } from './HttpService';
 
 export class ApiClient {
     private baseUrl: string;
