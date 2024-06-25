@@ -1,8 +1,11 @@
 {
+  "type": "module",
   "name": "captaincoder",
   "displayName": "CaptainCoder",
-  "description": "CaptainCoder is a privacy-focused, locally-run code completion extension for VSCode that supports a wide range of popular large language models with open-source flexibility and the integration of Retrieval-Augmented Generation (RAG).",
   "version": "0.0.1",
+  "description": "CaptainCoder is a privacy-focused, locally-run code completion extension for VSCode that supports a wide range of popular large language models with open-source flexibility and the integration of Retrieval-Augmented Generation (RAG).",
+  "author": "jeanjerome",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -24,6 +27,10 @@
       {
         "command": "captaincoder.generateText",
         "title": "CaptainCoder: Generate Text from Mixtral"
+      },
+      {
+        "command": "captaincoder.callRagModel",
+        "title": "CaptainCoder: Call RAG Model"
       }
     ]
   },
@@ -36,14 +43,16 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/node": "20.x",
+    "@types/node": "^20.14.8",
     "@types/vscode": "^1.90.0",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.4.0",
     "eslint": "^8.57.0",
-    "typescript": "^5.4.5"
+    "ts-node": "^10.9.2",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.2"
   },
   "dependencies": {
     "@llm-tools/embedjs": "^0.0.89"

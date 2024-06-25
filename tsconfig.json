@@ -1,7 +1,13 @@
 {
+	"extends": "ts-node/node16/tsconfig.json",
+	"ts-node": {
+	  "transpileOnly": true,
+	  "files": true,
+	  "esm": true
+	},
 	"compilerOptions": {
-		"module": "Node16",
-		"target": "ES2020",
+    	"module": "ESNext", // or ES2015, ES2020
+		"moduleResolution": "Bundler",
 		"outDir": "out",
 		"removeComments": true,
 		"esModuleInterop": true,
@@ -9,6 +15,7 @@
 		"lib": [
 			"ES2020"
 		],
+		"typeRoots" : ["./node_modules/@types", "./typings"],
 		"sourceMap": true,
 		"rootDir": "src",
 		"strict": true,

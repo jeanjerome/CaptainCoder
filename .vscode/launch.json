@@ -8,8 +8,12 @@
 		{
 			"name": "Run Extension",
 			"type": "extensionHost",
-			"request": "launch",
-			"args": [
+		"request": "launch",
+		"runtimeArgs": [
+			"-r",
+			"ts-node/register"
+		],
+		"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
 			"outFiles": [
