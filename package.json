@@ -24,11 +24,16 @@
       {
         "command": "captaincoder.generateText",
         "title": "CaptainCoder: Generate Text from Mixtral"
+      },
+      {
+        "command": "captaincoder.pickProjectFiles",
+        "title": "CaptainCoder: Pick Code Content"
       }
     ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
+    "clean": "rm -rf ./out",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
@@ -36,6 +41,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "20.x",
     "@types/vscode": "^1.90.0",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
@@ -46,6 +52,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@llm-tools/embedjs": "^0.0.89"
+    "fast-glob": "^3.3.2",
+    "fs-extra": "^11.2.0"
   }
 }

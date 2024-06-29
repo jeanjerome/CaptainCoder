@@ -1,5 +1,3 @@
-// src/utils/HttpUtils.ts
-
 export async function sendHttpRequest(url: string, options: RequestInit, stream: boolean = false, onData?: (data: string) => void): Promise<any> {
     const response = await fetch(url, options);
 
