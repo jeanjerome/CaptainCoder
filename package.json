@@ -28,7 +28,11 @@
       {
         "command": "captaincoder.pickProjectFiles",
         "title": "CaptainCoder: Pick Code Content"
-      }
+      },
+      {
+        "command": "captaincoder.loadVectorStore",
+        "title": "CaptainCoder: Load Vector Store"
+      }   
     ]
   },
   "scripts": {
@@ -52,7 +56,10 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@langchain/community": "^0.2.16",
+    "@langchain/core": "^0.2.11",
     "fast-glob": "^3.3.2",
     "fs-extra": "^11.2.0"
-  }
+  },
+  "overrides": {}
 }
