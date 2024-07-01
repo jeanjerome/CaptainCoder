@@ -1,17 +1,17 @@
 import * as vscode from 'vscode';
 import { ListModelsCommand } from './ListModelsCommand';
 import { PullModelCommand } from './PullModelCommand';
-import { GenerateTextCommand } from './GenerateTextCommand';
 import { PickProjectFilesCommand } from './PickProjectFilesCommand';
 import { ProjectTypeDetector } from '../services/ProjectTypeDetector';
 import { ProjectFileExcluder } from '../services/ProjectFileExcluder';
 import { ProjectCodePicker } from '../services/ProjectCodePicker';
 import { LoadVectorStoreCommand } from './LoadVectorStoreCommand';
 import { TextSplitter } from '../services/TextSplitter';
-import { InMemoryVectorStore } from '../services/InMemoryVectorStore';
 
 import { ApiClient } from '../services/ApiClient';
 import { apiUrl } from '../config';
+import { ChatWithCaptainCommand } from './ChatWithCaptainCommand';
+import { VectorStoreInMemory } from '../services/VectorStoreInMemory';
 
 export function registerCommands(context: vscode.ExtensionContext) {
     const apiClient = new ApiClient(apiUrl);
@@ -22,8 +22,8 @@ export function registerCommands(context: vscode.ExtensionContext) {
     const pullModelCommand = new PullModelCommand(apiClient);
     context.subscriptions.push(vscode.commands.registerCommand('captaincoder.pullModel', () => pullModelCommand.execute()));
 
-    const generateTextCommand = new GenerateTextCommand(apiClient);
-    context.subscriptions.push(vscode.commands.registerCommand('captaincoder.generateText', () => generateTextCommand.execute()));
+    const chatWithCaptainCommand = new ChatWithCaptainCommand();
+    context.subscriptions.push(vscode.commands.registerCommand('captaincoder.chatWithCaptainCommand', () => chatWithCaptainCommand.execute()));
 
     const projectTypeDetector = new ProjectTypeDetector();
     const projectFileExcluder = new ProjectFileExcluder();
@@ -32,7 +32,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('captaincoder.pickProjectFiles', () => pickProjectFilesCommand.execute()));
 
     const textSplitter = new TextSplitter();
-    const vectorStore = new InMemoryVectorStore();
+    const vectorStore = new VectorStoreInMemory();
     const loadVectorStoreCommand = new LoadVectorStoreCommand(textSplitter, vectorStore);
     context.subscriptions.push(vscode.commands.registerCommand('captaincoder.loadVectorStore', () => loadVectorStoreCommand.execute()));
 }

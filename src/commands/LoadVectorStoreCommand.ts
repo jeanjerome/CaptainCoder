@@ -2,13 +2,13 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import { TextSplitter } from '../services/TextSplitter';
-import { InMemoryVectorStore } from '../services/InMemoryVectorStore';
+import { VectorStoreInMemory } from '../services/VectorStoreInMemory';
 import { Command } from './Command';
 
 export class LoadVectorStoreCommand implements Command {
     constructor(
         private textSplitter: TextSplitter,
-        private vectorStore: InMemoryVectorStore
+        public vectorStore: VectorStoreInMemory
     ) {}
 
     async execute() {

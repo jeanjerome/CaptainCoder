@@ -32,7 +32,11 @@
       {
         "command": "captaincoder.loadVectorStore",
         "title": "CaptainCoder: Load Vector Store"
-      }   
+      },
+      {
+        "command": "captaincoder.chatWithCaptainCommand",
+        "title": "CaptainCoder: Chat With The Captain"
+      }
     ]
   },
   "scripts": {
