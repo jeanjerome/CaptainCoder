@@ -7,7 +7,6 @@ import { ProjectFileExcluder } from '../services/ProjectFileExcluder';
 import { ProjectCodePicker } from '../services/ProjectCodePicker';
 import { LoadVectorStoreCommand } from './LoadVectorStoreCommand';
 import { TextSplitter } from '../services/TextSplitter';
-
 import { ApiClient } from '../services/ApiClient';
 import { apiUrl } from '../config';
 import { ChatWithCaptainCommand } from './ChatWithCaptainCommand';
@@ -22,7 +21,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
     const pullModelCommand = new PullModelCommand(apiClient);
     context.subscriptions.push(vscode.commands.registerCommand('captaincoder.pullModel', () => pullModelCommand.execute()));
 
-    const chatWithCaptainCommand = new ChatWithCaptainCommand();
+    const chatWithCaptainCommand = new ChatWithCaptainCommand(apiClient, context.extensionPath);
     context.subscriptions.push(vscode.commands.registerCommand('captaincoder.chatWithCaptainCommand', () => chatWithCaptainCommand.execute()));
 
     const projectTypeDetector = new ProjectTypeDetector();

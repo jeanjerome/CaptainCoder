@@ -15,27 +15,28 @@
     "commands": [
       {
         "command": "captaincoder.listModels",
-        "title": "CaptainCoder: List Models"
+        "title": "List Models",
+        "category": "Captain Coder"
       },
       {
         "command": "captaincoder.pullModel",
-        "title": "CaptainCoder: Pull Model"
-      },
-      {
-        "command": "captaincoder.generateText",
-        "title": "CaptainCoder: Generate Text from Mixtral"
+        "title": "Pull Model",
+        "category": "Captain Coder"
       },
       {
         "command": "captaincoder.pickProjectFiles",
-        "title": "CaptainCoder: Pick Code Content"
+        "title": "Pick Code Content",
+        "category": "Captain Coder"
       },
       {
         "command": "captaincoder.loadVectorStore",
-        "title": "CaptainCoder: Load Vector Store"
+        "title": "Load Vector Store",
+        "category": "Captain Coder"
       },
       {
         "command": "captaincoder.chatWithCaptainCommand",
-        "title": "CaptainCoder: Chat With The Captain"
+        "title": "Chat With The Captain",
+        "category": "Captain Coder"
       }
     ]
   },

@@ -64,7 +64,7 @@ answer:
             question: question
         });
 
-        console.log(response);
+        return response;
     }
 
     combineDocuments(docs: Document<Record<string, any>>[]) {

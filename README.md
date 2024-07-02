@@ -1,8 +1,7 @@
-<div align="center">
-
 # CaptainCoder
 
-![CaptainCoder Logo](icon.png)
+<div align="center">
+   ![CaptainCoder Logo](icon.png)
 </div>
 
 ## 🚧 Work In Progress 🚧
@@ -37,11 +36,31 @@ CaptainCoder is a privacy-focused, locally-run code completion extension for VSC
 ## Usage (Currently Only Basic)
 
 1. **List Available Models:**
-   - Use the command `CaptainCoder: List Models` to fetch the list.
+   - Use the command `CaptainCoder: List Models` to fetch the list of available models.
+   - In the Command Palette (`Ctrl+Shift+P`), type `CaptainCoder: List Models` and press `Enter`.
+   - A notification will display the fetched data, and the list will be logged in the console.
+
 2. **Install New Models:**
-    - Use the command `CaptainCoder: Pull Model` to install a model.
-3. **Generate Text:**
-    - Use the command `CaptainCoder: Generate Text` to chat with the model.
+   - Use the command `CaptainCoder: Pull Model` to install a new model.
+   - In the Command Palette (`Ctrl+Shift+P`), type `CaptainCoder: Pull Model` and press `Enter`.
+   - Enter the name of the model you want to download when prompted.
+   - A progress notification will show the download status, and a message will appear upon successful download.
+
+3. **Pick Project Files:**
+   - Use the command `CaptainCoder: Pick Code Content` to select code files from your project.
+   - In the Command Palette (`Ctrl+Shift+P`), type `CaptainCoder: Pick Code Content` and press `Enter`.
+   - The content will be saved to a file named `code_content.txt` in the root of your workspace.
+
+4. **Load Vector Store:**
+   - Use the command `CaptainCoder: Load Vector Store` to load the vector store with project content.
+   - In the Command Palette (`Ctrl+Shift+P`), type `CaptainCoder: Load Vector Store` and press `Enter`.
+   - A notification will confirm the successful loading of the vector store.
+
+5. **Chat With The Captain:**
+   - Use the command `CaptainCoder: Chat With The Captain` to interact with the chat interface.
+   - In the Command Palette (`Ctrl+Shift+P`), type `CaptainCoder: Chat With The Captain` and press `Enter`.
+   - A chat panel will open. Type your question in the input box and click `Send`.
+   - The response will be displayed in the chat panel.
 
 ## Issues
 
