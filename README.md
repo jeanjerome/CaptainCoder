@@ -1,7 +1,8 @@
+<div align="center">
+
 # CaptainCoder
 
-<div align="center">
-   ![CaptainCoder Logo](icon.png)
+![CaptainCoder Logo](icon.png)
 </div>
 
 ## 🚧 Work In Progress 🚧
