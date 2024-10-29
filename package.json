@@ -61,7 +61,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@langchain/community": "^0.2.16",
+    "@langchain/community": "^0.2.33",
     "@langchain/core": "^0.2.11",
     "fast-glob": "^3.3.2",
     "fs-extra": "^11.2.0"
